@@ -228,21 +228,6 @@ resource "aws_lb_target_group" "alb_target_group2" {
   }
 }
 
-resource "aws_lb_listener_rule" "alb_listener_rule_2" {
-  listener_arn = aws_lb_listener.alb_listener.arn
-  priority     = 10
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.alb_target_group2.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/second*"]
-    }
-  }
-}
 
 resource "aws_iam_role" "ecs_task_exec" {
   name = "ecsTaskExecutionRole-tst"
