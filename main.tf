@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "ecs_task_def" {
 },
   {
     name      = "second"
-    image     = "tomacat:latest"
+    image     = "tomcat:latest"
     essential = true
     portMappings = [{ containerPort = 8080 }]
     logConfiguration = {
