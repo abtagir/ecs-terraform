@@ -206,6 +206,15 @@ resource "aws_lb_target_group" "alb_target_group2" {
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = "vpc-0d31decf8a4f43b3f"
+
+  health_check {
+    path                = "/"
+    matcher             = "200-499"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 30
+    timeout             = 5
+  }
 }
 
 resource "aws_lb_listener_rule" "alb_listener_rule_2" {
