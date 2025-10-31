@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "ecs_task_def" {
 },
   {
     name      = "second"
-    image     = "tomcat:latest"
+    image     = "tomcat:11.0.13-jdk17-temurin-jammy"
     essential = true
     portMappings = [{ containerPort = 8080 }]
     logConfiguration = {
