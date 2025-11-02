@@ -1,4 +1,5 @@
 # AWS ECS Fargate Multi-Container Setup with ALB and Auto Scaling
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/0966a5c3-2ed8-4e1c-b664-43ed93ff1e4e" />
 
 This repository contains Terraform code to deploy an **AWS ECS Fargate service** running two containers behind an **Application Load Balancer (ALB)** with **auto-scaling** and **CloudWatch monitoring**.
 
