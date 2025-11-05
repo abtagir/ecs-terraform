@@ -19,7 +19,7 @@ resource "aws_subnet" "public_a" {
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "eu-central-1a"
   map_public_ip_on_launch = true
-  tags = { Name = "public-a" }
+  tags                    = { Name = "public-a" }
 }
 
 resource "aws_subnet" "public_b" {
@@ -27,7 +27,7 @@ resource "aws_subnet" "public_b" {
   cidr_block              = "10.0.2.0/24"
   availability_zone       = "eu-central-1b"
   map_public_ip_on_launch = true
-  tags = { Name = "public-b" }
+  tags                    = { Name = "public-b" }
 }
 
 # --- Private Subnets ---
@@ -135,10 +135,10 @@ resource "aws_security_group" "ecs_sg" {
   }
 
   ingress {
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    self        = true
+    from_port = 0
+    to_port   = 65535
+    protocol  = "tcp"
+    self      = true
   }
 
   egress {
