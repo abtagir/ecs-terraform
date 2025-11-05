@@ -60,7 +60,8 @@ resource "aws_ecs_task_definition" "server" {
         name          = "server-port"
       }]
       environment = [
-        { name = "REDIS_HOST", value = "redis" }
+        { name = "REDIS_HOST", value = "redis.vote.local" },
+        { name = "REDIS_PORT", value = "6379" }
       ]
       logConfiguration = {
         logDriver = "awslogs",
