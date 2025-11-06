@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "redis" {
   cpu                      = "256"
   memory                   = "512"
   execution_role_arn       = aws_iam_role.ecs_task_exec.arn
-
+  task_role_arn            = aws_iam_role.ecs_task_exec.arn
   container_definitions = jsonencode([
     {
       name         = "redis"
@@ -49,7 +49,7 @@ resource "aws_ecs_task_definition" "server" {
   cpu                      = "256"
   memory                   = "512"
   execution_role_arn       = aws_iam_role.ecs_task_exec.arn
-
+  task_role_arn            = aws_iam_role.ecs_task_exec.arn
   container_definitions = jsonencode([
     {
       name         = "vote-server"
@@ -83,7 +83,7 @@ resource "aws_ecs_task_definition" "client" {
   cpu                      = "256"
   memory                   = "512"
   execution_role_arn       = aws_iam_role.ecs_task_exec.arn
-
+  task_role_arn            = aws_iam_role.ecs_task_exec.arn
   container_definitions = jsonencode([
     {
       name         = "vote-client"
@@ -107,6 +107,7 @@ resource "aws_ecs_service" "redis_service" {
   task_definition = aws_ecs_task_definition.redis.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+  enable_execute_command = true
 
   network_configuration {
     subnets          = [aws_subnet.private_a.id, aws_subnet.private_b.id]
@@ -136,6 +137,7 @@ resource "aws_ecs_service" "server_service" {
   task_definition = aws_ecs_task_definition.server.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+  enable_execute_command = true
   depends_on      = [aws_ecs_service.redis_service]
 
   network_configuration {
@@ -166,6 +168,7 @@ resource "aws_ecs_service" "client_service" {
   task_definition = aws_ecs_task_definition.client.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+  enable_execute_command = true
   depends_on      = [aws_ecs_service.server_service]
 
   network_configuration {
