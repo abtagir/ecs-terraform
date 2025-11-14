@@ -94,7 +94,7 @@ resource "aws_ecs_task_definition" "client" {
         name          = "client-port"
       }]
       environment = [
-        { name = "VOTE_SERVER_URL", value = "http://${aws_lb.vote_alb.dns_name}/api" }
+        { name = "VOTE_SERVER_URL", value = "http://vote-server.vote.local:5000" }
       ]
     }
   ])
@@ -144,13 +144,6 @@ resource "aws_ecs_service" "server_service" {
     subnets          = [aws_subnet.private_a.id, aws_subnet.private_b.id]
     security_groups  = [aws_security_group.ecs_sg.id]
     assign_public_ip = false
-  }
-
-  # Connect service to ALB
-  load_balancer {
-    target_group_arn = aws_lb_target_group.vote_server_tg.arn
-    container_name   = "vote-server"
-    container_port   = 5000
   }
 
   service_connect_configuration {
