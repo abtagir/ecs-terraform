@@ -30,9 +30,9 @@ resource "aws_ecs_task_definition" "redis" {
   task_role_arn            = aws_iam_role.ecs_task_exec.arn
   container_definitions = jsonencode([
     {
-      name         = "redis"
-      image        = "redis:latest"
-      essential    = true
+      name      = "redis"
+      image     = "redis:latest"
+      essential = true
       portMappings = [{
         containerPort = 6379
         name          = "redis-port"
@@ -52,9 +52,9 @@ resource "aws_ecs_task_definition" "server" {
   task_role_arn            = aws_iam_role.ecs_task_exec.arn
   container_definitions = jsonencode([
     {
-      name         = "vote-server"
-      image        = "662793765491.dkr.ecr.eu-central-1.amazonaws.com/vote-app:server-latest"
-      essential    = true
+      name      = "vote-server"
+      image     = "662793765491.dkr.ecr.eu-central-1.amazonaws.com/vote-app:server-latest"
+      essential = true
       portMappings = [{
         containerPort = 5000
         name          = "server-port"
@@ -86,9 +86,9 @@ resource "aws_ecs_task_definition" "client" {
   task_role_arn            = aws_iam_role.ecs_task_exec.arn
   container_definitions = jsonencode([
     {
-      name         = "vote-client"
-      image        = "662793765491.dkr.ecr.eu-central-1.amazonaws.com/vote-app:client-latest"
-      essential    = true
+      name      = "vote-client"
+      image     = "662793765491.dkr.ecr.eu-central-1.amazonaws.com/vote-app:client-latest"
+      essential = true
       portMappings = [{
         containerPort = 3000
         name          = "client-port"
@@ -102,11 +102,11 @@ resource "aws_ecs_task_definition" "client" {
 
 # --- Redis Service ---
 resource "aws_ecs_service" "redis_service" {
-  name            = "redis"
-  cluster         = aws_ecs_cluster.vote_cluster.id
-  task_definition = aws_ecs_task_definition.redis.arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
+  name                   = "redis"
+  cluster                = aws_ecs_cluster.vote_cluster.id
+  task_definition        = aws_ecs_task_definition.redis.arn
+  desired_count          = 1
+  launch_type            = "FARGATE"
   enable_execute_command = true
 
   network_configuration {
@@ -132,13 +132,13 @@ resource "aws_ecs_service" "redis_service" {
 
 # --- Vote Server Service ---
 resource "aws_ecs_service" "server_service" {
-  name            = "vote-server"
-  cluster         = aws_ecs_cluster.vote_cluster.id
-  task_definition = aws_ecs_task_definition.server.arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
+  name                   = "vote-server"
+  cluster                = aws_ecs_cluster.vote_cluster.id
+  task_definition        = aws_ecs_task_definition.server.arn
+  desired_count          = 1
+  launch_type            = "FARGATE"
   enable_execute_command = true
-  depends_on      = [aws_ecs_service.redis_service]
+  depends_on             = [aws_ecs_service.redis_service]
 
   network_configuration {
     subnets          = [aws_subnet.private_a.id, aws_subnet.private_b.id]
@@ -163,13 +163,13 @@ resource "aws_ecs_service" "server_service" {
 
 # --- Vote Client Service (Frontend) ---
 resource "aws_ecs_service" "client_service" {
-  name            = "vote-client"
-  cluster         = aws_ecs_cluster.vote_cluster.id
-  task_definition = aws_ecs_task_definition.client.arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
+  name                   = "vote-client"
+  cluster                = aws_ecs_cluster.vote_cluster.id
+  task_definition        = aws_ecs_task_definition.client.arn
+  desired_count          = 1
+  launch_type            = "FARGATE"
   enable_execute_command = true
-  depends_on      = [aws_ecs_service.server_service]
+  depends_on             = [aws_ecs_service.server_service]
 
   network_configuration {
     subnets          = [aws_subnet.private_a.id, aws_subnet.private_b.id]
