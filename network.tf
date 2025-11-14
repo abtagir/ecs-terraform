@@ -127,20 +127,44 @@ resource "aws_security_group" "ecs_sg" {
   description = "Allow ALB and internal communication"
   vpc_id      = aws_vpc.vote_vpc.id
 
+
+  # Allow ALB to reach ECS tasks (client:3000, server:5000)
   ingress {
-    from_port       = 0
-    to_port         = 65535
+    from_port       = 3000
+    to_port         = 3000
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb_sg.id]
+  }
+  ingress {
+    from_port       = 5000
+    to_port         = 5000
     protocol        = "tcp"
     security_groups = [aws_security_group.alb_sg.id]
   }
 
+  # Allow ECS tasks to talk to Redis (internal communication)
   ingress {
-    from_port = 0
-    to_port   = 65535
+    from_port = 6379
+    to_port   = 6379
     protocol  = "tcp"
     self      = true
   }
 
+  # Allow ECS tasks to talk to each other on app ports (if needed)
+  ingress {
+    from_port = 5000
+    to_port   = 5000
+    protocol  = "tcp"
+    self      = true
+  }
+  ingress {
+    from_port = 3000
+    to_port   = 3000
+    protocol  = "tcp"
+    self      = true
+  }
+
+  # Egress: allow all outbound traffic (default for ECS)
   egress {
     from_port   = 0
     to_port     = 0
@@ -148,3 +172,4 @@ resource "aws_security_group" "ecs_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
