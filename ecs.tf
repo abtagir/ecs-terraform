@@ -94,7 +94,7 @@ resource "aws_ecs_task_definition" "client" {
         name          = "client-port"
       }]
       environment = [
-        { name = "VOTE_SERVER_URL", value = "http://${aws_lb.vote_alb.dns_name}/api" }
+        { name = "VOTE_SERVER_URL", value = "http://vote-server.vote.local:5000" }
       ]
     }
   ])
