@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vote App</title>
+</head>
+<body>
+  <h1>Vote for Dogs or Cats</h1>
+  <button onclick="vote('dogs')">Vote for Dogs</button>
+  <button onclick="vote('cats')">Vote for Cats</button>
+  <h2>Results</h2>
+  <div id="results"></div>
+
+  <script>
+    async function vote(option) {
+      await fetch('/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ vote: option })
+      });
+      fetchResults();
+    }
+
+    async function fetchResults() {
+      const response = await fetch('/results');
+      const data = await response.json();
+      document.getElementById('results').innerHTML =
+        `Dogs: ${data.dogs}<br>Cats: ${data.cats}`;
+    }
+
+    fetchResults();
+  </script>
+</body>
+</html>
